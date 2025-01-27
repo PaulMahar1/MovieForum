@@ -54,7 +54,7 @@ namespace MovieForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DiscussionId,Title,Content,ImageFilename,CreateDate")] Discussion discussion)
+        public async Task<IActionResult> Create([Bind("DiscussionId,Title,Username,Content,ImageFilename,CreateDate")] Discussion discussion)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace MovieForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Content,ImageFilename,CreateDate")] Discussion discussion)
+        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Username,Content,ImageFilename,CreateDate")] Discussion discussion)
         {
             if (id != discussion.DiscussionId)
             {
