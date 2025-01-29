@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieForum.Data;
 using MovieForum.Models;
+using System.IO;
 
 namespace MovieForum.Controllers
 {
@@ -54,13 +55,38 @@ namespace MovieForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DiscussionId,Title,Username,Content,ImageFilename,CreateDate")] Discussion discussion)
+        public async Task<IActionResult> Create([Bind("Title,Username,Content,ImageFile,CreateDate")] Discussion discussion)
         {
+
+            // set the create date
+            discussion.CreateDate = DateTime.Now;
+
+            // rename the uploaded file to a guid (unique filename). Set before photo saved in database.
+            //discussion.ImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(discussion);
                 await _context.SaveChangesAsync();
+
+                if (discussion.ImageFile != null)
+                {
+                    discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
+
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", discussion.ImageFilename);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await discussion.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
                 return RedirectToAction(nameof(Index));
+            } else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                Console.WriteLine("Else Block Triggered");
+                Console.WriteLine(errors);
             }
             return View(discussion);
         }

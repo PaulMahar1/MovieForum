@@ -1,4 +1,7 @@
-﻿namespace MovieForum.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace MovieForum.Models
 {
     public class Discussion
     {
@@ -7,8 +10,14 @@
 
         public string Username { get; set; } = string.Empty ;
         public string Content { get; set; } = string.Empty;
-        public string ImageFilename { get; set; } = string.Empty;
-        public DateTime CreateDate { get; set; }
+        public string? ImageFilename { get; set; }
+
+        //[Display(Name = "Created")]
+        public DateTime? CreateDate { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Photograph")]
+        public IFormFile? ImageFile { get; set; } // Nullable for optional file uploads
 
         // Navigation
         public List<Comment>? Comments { get; set; }
