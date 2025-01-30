@@ -9,10 +9,10 @@
     <div class="masonry-grid">
         @foreach (var item in Model)
         {
-            string imageUrl = Url.Content("/photos/" + item.ImageFilename);
+            string imageUrl = $"/photos/{item.ImageFilename}";
 
             <div class="masonry-grid-item">
-                <a href="@Url.Action("Details", "Home", new { id = item.DiscussionId })">
+                <a href="@Url.Action("DiscussionDetails", "Home", new { id = item.DiscussionId })">
                     <img src="@imageUrl" class="img-fluid" alt="@item.Title" />
                 </a>
             </div>
