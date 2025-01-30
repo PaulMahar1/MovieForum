@@ -1,8 +1,21 @@
-﻿@{
+﻿@model List<MovieForum.Models.Discussion>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (Model != null && Model.Any())
+{
+    <div class="masonry-grid">
+        @foreach (var item in Model)
+        {
+            string imageUrl = Url.Content("/photos/" + item.ImageFilename);
+
+            <div class="masonry-grid-item">
+                <a href="@Url.Action("Details", "Home", new { id = item.DiscussionId })">
+                    <img src="@imageUrl" class="img-fluid" alt="@item.Title" />
+                </a>
+            </div>
+        }
+    </div>
+}

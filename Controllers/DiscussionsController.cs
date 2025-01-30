@@ -58,22 +58,20 @@ namespace MovieForum.Controllers
         public async Task<IActionResult> Create([Bind("Title,Username,Content,ImageFile,CreateDate")] Discussion discussion)
         {
 
-            // set the create date
-            discussion.CreateDate = DateTime.Now;
 
             // rename the uploaded file to a guid (unique filename). Set before photo saved in database.
-            //discussion.ImageFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
 
 
             if (ModelState.IsValid)
             {
+                // Inset new record into table
                 _context.Add(discussion);
                 await _context.SaveChangesAsync();
 
+                // Save the file
                 if (discussion.ImageFile != null)
                 {
-                    discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
-
                     string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "photos", discussion.ImageFilename);
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -81,13 +79,10 @@ namespace MovieForum.Controllers
                         await discussion.ImageFile.CopyToAsync(fileStream);
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
-            } else
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-                Console.WriteLine("Else Block Triggered");
-                Console.WriteLine(errors);
-            }
+            } 
+
             return View(discussion);
         }
 

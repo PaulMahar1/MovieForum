@@ -10,10 +10,12 @@ namespace MovieForum.Models
 
         public string Username { get; set; } = string.Empty ;
         public string Content { get; set; } = string.Empty;
+
+        [Display(Name = "Thumbnail")]
         public string? ImageFilename { get; set; }
 
-        //[Display(Name = "Created")]
-        public DateTime? CreateDate { get; set; }
+        [Display(Name = "Created")]
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         [NotMapped]
         [Display(Name = "Photograph")]
