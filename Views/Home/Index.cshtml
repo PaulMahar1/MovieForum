@@ -6,16 +6,53 @@
 
 @if (Model != null && Model.Any())
 {
-    <div class="masonry-grid">
-        @foreach (var item in Model)
-        {
-            string imageUrl = $"/photos/{item.ImageFilename}";
 
-            <div class="masonry-grid-item">
-                <a href="@Url.Action("DiscussionDetails", "Home", new { id = item.DiscussionId })">
-                    <img src="@imageUrl" class="img-fluid" alt="@item.Title" />
-                </a>
+    <div class="container-fluid home">
+        <div class="row">
+        <div class="col-9">
+
+
+            @{
+                var sortedModel = Model.OrderByDescending(x => x.CreateDate);
+            }
+
+            @foreach (var item in sortedModel)
+            {
+                string imageUrl = $"/photos/{item.ImageFilename}";
+                    <a href="@Url.Action("DiscussionDetails", "Home", new { id = item.DiscussionId })">
+                <div class="row post m-3 ps-1 pt-1 pb-1 rounded g-0 post-block">
+
+                    <div class="col-md-4 pe-0" style="background-color:#3AAFA9">
+
+                           <img src="@imageUrl" alt="@item.Title" class="img-thumbnail thumbnail" style="object-fit: cover; height: 200px;">
+                           
+                        </div>
+
+                    <div class="col-md-8 p-0" style="background-color:#3AAFA9">
+                        <div class="row align-items-start h-75 ms-1 me-0" style="background-color:#3AAFA9">
+                            <h5 class="title">@item.Title</h5>
+                            <div class="tags">
+                                <span class="tag"> Comments: @item.Comments.Count</span>
+                            </div>
+                            </div>
+                        <div class="row date-style g-0 h-25 align-items-center pe-3" style="background-color:#3AAFA9">
+                            <span class="last-updated text-end">@item.CreateDate.ToString("MM/dd/yyyy - hh:mm tt")</span>
+                        </div>
+                        </div>
+                </div> </a>
+
+            }
+        </div>
+        <div class="col-3 mt-1">
+            <a asp-action="Create" asp-controller="Discussions">
+            <div class="d-flex flex-column p-2 mt-1">
+                <div type="button" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-square-plus" style="color: #def2f1;"></i>
+                    Add New Post</div>
             </div>
-        }
+                </a>
+        </div>
+      
+        </div>
     </div>
 }

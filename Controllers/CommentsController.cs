@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -27,9 +28,16 @@ namespace MovieForum.Controllers
         // GET: Comments/Details/5
 
         // GET: Comments/Create
-        public IActionResult Create()
+        [HttpGet]
+        public IActionResult Create(int? id)
         {
-            ViewData["DiscussionId"] = new SelectList(_context.Discussion, "DiscussionId", "DiscussionId");
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["DiscussionId"] = id;
+    
             return View();
         }
 
@@ -37,16 +45,23 @@ namespace MovieForum.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("Comments/Create/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentId,Content,CreateDate,DiscussionId")] Comment comment)
+        public async Task<IActionResult> Create(int? id, [Bind("CommentId,Content,CreateDate")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.DiscussionId = id ?? comment.DiscussionId;
+
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+
+                return RedirectToAction("DiscussionDetails", "Home", new { id = comment.DiscussionId });
             }
-            ViewData["DiscussionId"] = new SelectList(_context.Discussion, "DiscussionId", "DiscussionId", comment.DiscussionId);
+
+            ViewData["DiscussionId"] = new SelectList(_context.Discussion, "DiscussionId", "Title", comment.DiscussionId);
+
             return View(comment);
         }      
 

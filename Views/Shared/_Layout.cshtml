@@ -9,11 +9,16 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MovieForum.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MovieForum</a>
+<body style="background-color:#3AAFA9">
+    <div style="width: 100%; height: 200px; overflow: hidden;">
+        <img src="/photos/banner.png" class="img-fluid" style="width: 100%; object-fit: cover;">
+    </div>
+
+    <header >
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white box-shadow mb-3 pt-0 pb-0">
+            <div class="container-fluid" style="background-color:#17252A">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-film fa-sm" style="color: #feffff;"></i> MovieForum</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,21 +26,53 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-house" style="color: #def2f1;"></i> Home  &nbsp</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Discussions" asp-action="Index">Discussions</a>
+                            <a class="nav-link" asp-area="" asp-controller="Discussions" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-message" style="color: #def2f1;"></i> Discussions</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+
+    @* <div class="container mt-4 mr-1"> *@
+    @*     <div class="row"> *@
+
+            @* <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white"> *@
+            @*     <div class="position-sticky"> *@
+            @*         <div class="list-group list-group-flush mx-3 mt-4"> *@
+            @*             <a href="#" *@
+            @*                class="list-group-item list-group-item-action py-2 ripple" *@
+            @*                aria-current="true"> *@
+            @*                 <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Home</span> *@
+            @*             </a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple active"> *@
+            @*                 <i class="fas fa-chart-area fa-fw me-3"></i><span>Alt F4</span> *@
+            @*             </a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-lock fa-fw me-3"></i><span>Demo</span></a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-chart-line fa-fw me-3"></i><span>Topic 1</span></a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"> *@
+            @*                 <i class="fas fa-chart-pie fa-fw me-3"></i><span>Another One</span> *@
+            @*             </a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-chart-bar fa-fw me-3"></i><span>Fake</span></a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-globe fa-fw me-3"></i><span>Too Much</span></a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-building fa-fw me-3"></i><span>Effort</span></a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-calendar fa-fw me-3"></i><span>For</span></a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-users fa-fw me-3"></i><span>This</span></a> *@
+            @*             <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-money-bill fa-fw me-3"></i><span>Shit</span></a> *@
+            @*         </div> *@
+            @*     </div> *@
+            @* </nav> *@
+
+
+
+                <main role="main" class="col">
+                    @RenderBody()
+                </main>
+   
 
     <footer class="border-top footer text-muted">
         <div class="container">

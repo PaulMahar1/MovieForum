@@ -3,15 +3,16 @@
 @{
     ViewData["Title"] = "Create";
 }
-<body class="createDiscussion">
+<div class="row d-flex justify-content-center">
+    <div class="col-6">
 <h1>New Post</h1>
 
 <h4></h4>
 <hr />
-<div class="row">
-    <div class="container-fluid">
+
+
         
-        <form enctype="multipart/form-data" class="bg-light p-4 rounded shadow" asp-action="Create">
+        <form enctype="multipart/form-data" class="p-4" asp-action="Create" style="color:#FEFFFF;">
             
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -35,15 +36,18 @@
             @* </div> *@
 
 
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
+            <div class="form-group mt-3">
+                <label asp-for="Content" class="control-label" ></label>
                 <textarea asp-for="Content" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
         
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" type="file" class="form-control-file" />
+            <div class="form-group mt-3">
+                <label asp-for="ImageFile" class="btn btn-primary">
+                <input asp-for="ImageFile" type="file" class="form-control-file" style="display:none;" />
+                <span id="image">Upload Image</span>
+                </label>
+
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             
@@ -53,18 +57,15 @@
             @*     <span asp-validation-for="CreateDate" class="text-danger"></span> *@
             @* </div> *@
             
-            <div class="form-group">
+            <div class="form-group mt-3 d-flex justify-content-between">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-primary">Back to List</a>
             </div>
         
         </form>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
-</body>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
