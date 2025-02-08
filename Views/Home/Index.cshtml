@@ -9,50 +9,62 @@
 
     <div class="container-fluid home">
         <div class="row">
-        <div class="col-9">
+            <div class="col-9">
 
 
-            @{
-                var sortedModel = Model.OrderByDescending(x => x.CreateDate);
-            }
+                @{
+                    var sortedModel = Model.OrderByDescending(x => x.CreateDate);
+                }
 
-            @foreach (var item in sortedModel)
-            {
-                string imageUrl = $"/photos/{item.ImageFilename}";
+                @foreach (var item in sortedModel)
+                {
+                    string imageUrl = $"/photos/{item.ImageFilename}";
                     <a href="@Url.Action("DiscussionDetails", "Home", new { id = item.DiscussionId })">
-                <div class="row post m-3 ps-1 pt-1 pb-1 rounded g-0 post-block">
+                        <div class="row post m-3 ps-1 pt-1 pb-1 rounded g-0 post-block">
 
-                    <div class="col-md-4 pe-0" style="background-color:#3AAFA9">
+                            <div class="col-md-4 pe-0" style="background-color:#3AAFA9">
 
-                           <img src="@imageUrl" alt="@item.Title" class="img-thumbnail thumbnail" style="object-fit: cover; height: 200px;">
-                           
-                        </div>
+                                <img src="@imageUrl" alt="@item.Title" class="img-thumbnail thumbnail" style="object-fit: cover; height: 200px;">
 
-                    <div class="col-md-8 p-0" style="background-color:#3AAFA9">
-                        <div class="row align-items-start h-75 ms-1 me-0" style="background-color:#3AAFA9">
-                            <h5 class="title">@item.Title</h5>
-                            <div class="tags">
-                                <span class="tag"> Comments: @item.Comments.Count</span>
                             </div>
-                            </div>
-                        <div class="row date-style g-0 h-25 align-items-center pe-3" style="background-color:#3AAFA9">
-                            <span class="last-updated text-end">@item.CreateDate.ToString("MM/dd/yyyy - hh:mm tt")</span>
-                        </div>
-                        </div>
-                </div> </a>
 
-            }
-        </div>
-        <div class="col-3 mt-1">
-            <a asp-action="Create" asp-controller="Discussions">
-            <div class="d-flex flex-column p-2 mt-1">
-                <div type="button" class="btn btn-primary btn-lg">
-                    <i class="fa-solid fa-square-plus" style="color: #def2f1;"></i>
-                    Add New Post</div>
+                            <div class="col-md-8 p-0" style="background-color:#3AAFA9">
+                                <div class="row align-items-start h-75 ms-1 me-0" style="background-color:#3AAFA9">
+                                    <h5 class="title">@item.Title</h5>
+                                    <div class="tags">
+                                        <span class="tag"> Comments: @item.Comments.Count</span>
+                                    </div>
+                                </div>
+                                <div class="row date-style g-0 h-25 align-items-center pe-3" style="background-color:#3AAFA9">
+                                    <span class="last-updated text-end">@item.CreateDate.ToString("MM/dd/yyyy - hh:mm tt")</span>
+                                </div>
+                            </div>
+                        </div> </a>
+
+                }
             </div>
+            <div class="col-3 mt-1">
+                <a asp-action="Create" asp-controller="Discussions">
+                    <div class="d-flex flex-column p-2 mt-1">
+                        <div type="button" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-square-plus" style="color: #def2f1;"></i>
+                            Add New Post
+                        </div>
+                    </div>
                 </a>
+                <div class="row post m-3 ps-1 pt-1 pb-1 rounded g-0">
+            <h2>Popular</h2>
+            @{
+                var trending = Model.OrderByDescending(x => x.Comments.Count);
+            }
+
+            @foreach (var post in trending){
+                string imageTrending = $"/photos/{post.ImageFilename}";
+                <img src="@imageTrending" alt="@post.Title" class="img-thumbnail thumbnail mt-3" style="object-fit: cover; height: 200px;">
+            
+            }
+            </div>
         </div>
-      
         </div>
     </div>
 }
