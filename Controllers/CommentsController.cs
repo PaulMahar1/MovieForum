@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieForum.Data;
 using MovieForum.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace MovieForum.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly MovieForumContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CommentsController(MovieForumContext context)
+        public CommentsController(MovieForumContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Comments/Edit/5
@@ -29,41 +34,51 @@ namespace MovieForum.Controllers
 
         // GET: Comments/Create
         [HttpGet]
-        public IActionResult Create(int? id)
+        public async Task<IActionResult> Create(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+            //string userId = _userManager.GetUserId(User);
 
-            ViewData["DiscussionId"] = id;
-    
-            return View();
+            //var discussion = await _context.Discussion             
+            //    .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+            //if (discussion == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //ViewData["DiscussionId"] = id;
+            var comment = new Comment { DiscussionId = (int)id };
+            Console.WriteLine(comment.DiscussionId);
+            return View(comment);
         }
 
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Route("Comments/Create/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? id, [Bind("CommentId,Content,CreateDate")] Comment comment)
+        public async Task<IActionResult> Create([Bind("CommentId,Content,CreateDate,DiscussionId")] Comment comment)
         {
+
             if (ModelState.IsValid)
             {
-                comment.DiscussionId = id ?? comment.DiscussionId;
+
+
+                var userId = _userManager.GetUserId(User);
+
+                comment.ApplicationUserId = userId;
+
 
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-
-
                 return RedirectToAction("DiscussionDetails", "Home", new { id = comment.DiscussionId });
             }
 
-            ViewData["DiscussionId"] = new SelectList(_context.Discussion, "DiscussionId", "Title", comment.DiscussionId);
-
             return View(comment);
-        }      
+        }
 
         private bool CommentExists(int id)
         {

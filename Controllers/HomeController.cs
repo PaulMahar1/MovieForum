@@ -1,8 +1,11 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieForum.Data;
 using MovieForum.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace MovieForum.Controllers
 {
@@ -10,18 +13,21 @@ namespace MovieForum.Controllers
     {
         private readonly MovieForumContext _context;
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(MovieForumContext context, ILogger<HomeController> logger)
+
+        public HomeController(MovieForumContext context, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [HttpGet("")]
         [HttpGet("Index")]
         public async Task<IActionResult> Index()
         {
-            var discussion = await _context.Discussion.Include(m => m.Comments).ToListAsync();
+            var discussion = await _context.Discussion.Include(m => m.Comments).Include(m => m.ApplicationUser).ToListAsync();
 
             return View(discussion);
         }
@@ -29,6 +35,25 @@ namespace MovieForum.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Profile(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+
+            var discussions = await _context.Discussion
+                .Where(d => d.ApplicationUserId == user.Id)
+                .Include(m => m.Comments)
+                .ToListAsync();
+
+            ViewBag.Discussions = discussions;
+
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            return View(user);
         }
 
         [HttpGet("Home/DiscussionDetails/{id:int}")]
@@ -42,6 +67,7 @@ namespace MovieForum.Controllers
 
             var discussion = await _context.Discussion
                                            .Include(m => m.Comments)
+                                           .Include(m => m.ApplicationUser)
                                            .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (discussion == null)

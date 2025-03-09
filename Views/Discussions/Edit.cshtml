@@ -2,14 +2,21 @@
 
 @{
     ViewData["Title"] = "Edit";
+    string imageUrl = $"/photos/{Model.ImageFilename}";
 }
+<div class="col-10 mx-auto newLink">
 
-<h1>Edit</h1>
-
-<h4>Discussion</h4>
+<h4>Edit Discussion</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+        <div class="col-md-6">
+
+            <div class="col pe-0" style="background-color:#3AAFA9">
+                <img src="@imageUrl" alt="@Model.Title" class="img-thumbnail thumbnail" style="object-fit: cover; height: 400px;">
+            </div>
+
+        </div>
+    <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="DiscussionId" />
@@ -20,28 +27,32 @@
             </div>
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
+                    <textarea asp-for="Content" class="form-control" rows="9"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="ImageFilename" class="control-label"></label>
                 <input asp-for="ImageFilename" class="form-control" />
                 <span asp-validation-for="ImageFilename" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            </div>*@
+            @*<div class="form-group">
                 <label asp-for="CreateDate" class="control-label"></label>
                 <input asp-for="CreateDate" class="form-control" />
                 <span asp-validation-for="CreateDate" class="text-danger"></span>
-            </div>
+            </div> *@
+
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn w-100 btn-primary mb-1 mt-3" />
             </div>
+
         </form>
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
     </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

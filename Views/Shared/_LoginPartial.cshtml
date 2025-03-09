@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MovieForum.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+
+        <div class="dropdown">
+            <button class="btn dropdown-toggle" style="color:#feffff" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hello @currentUser?.Name!
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+               <li>
+                    <a id="profile" class="dropdown-item" asp-controller="Home" asp-action="Profile" asp-route-id="@UserManager.GetUserId(User)" title="Profile"><i class="fa-solid fa-user" style="color: #3AAFA9;"></i> Profile</a>
+               </li>
+               <li>
+                    <a class="dropdown-item" asp-area="" asp-controller="Discussions" asp-action="Index"><i class="fa-solid fa-message" style="color: #3AAFA9;"></i> My Discussions</a>
+               </li>
+               <li>
+                    <a id="manage" class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-user-pen" style="color: #3AAFA9;"></i> Account</a>
+               </li>
+               <li>
+                   <hr class="dropdown-divider">
+               </li>
+               <li>
+                   <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="dropdown-item"><i class="fa-solid fa-circle-xmark" style="color: #3AAFA9;"></i> Logout</button>
+                   </form>
+               </li>
+            </ul>
+        </div>
+}
+else
+{
+    <li class="nav-item">
+            <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register" style="color:#feffff">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login" style="color:#feffff">Login</a>
+    </li>
+}
+</ul>

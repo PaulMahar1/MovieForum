@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MovieForum.Data;
+using Microsoft.AspNetCore.Identity;
 namespace MovieForum
 {
     public class Program
@@ -10,6 +11,8 @@ namespace MovieForum
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<MovieForumContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MovieForumContext") ?? throw new InvalidOperationException("Connection string 'MovieForumContext' not found.")));
+
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<MovieForumContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -29,12 +32,14 @@ namespace MovieForum
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            app.MapRazorPages().WithStaticAssets();
             app.Run();
         }
     }

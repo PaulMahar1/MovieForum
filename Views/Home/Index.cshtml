@@ -1,13 +1,26 @@
 ﻿@model List<MovieForum.Models.Discussion>
+@using Microsoft.AspNetCore.Identity
+@using MovieForum.Data
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Home Page";
+    List<MovieForum.Models.Discussion> userDiscussions = new List<MovieForum.Models.Discussion>();
+
+    if (User.Identity.IsAuthenticated)
+    {
+        var user = await UserManager.GetUserAsync(User);
+        if (user != null)
+        {
+            userDiscussions = Model.Where(d => d.ApplicationUserId == user.Id).ToList();
+        }
+    }
 }
 
 @if (Model != null && Model.Any())
 {
 
-    <div class="container-fluid home">
+    <div class="container-fluid home col-10">
         <div class="row">
             <div class="col-9">
 
@@ -20,7 +33,7 @@
                 {
                     string imageUrl = $"/photos/{item.ImageFilename}";
                     <a href="@Url.Action("DiscussionDetails", "Home", new { id = item.DiscussionId })">
-                        <div class="row post m-3 ps-1 pt-1 pb-1 rounded g-0 post-block">
+                        <div class="row post m-3 mb-0 ps-1 pt-1 pb-1 rounded g-0 post-block">
 
                             <div class="col-md-4 pe-0" style="background-color:#3AAFA9">
 
@@ -32,14 +45,20 @@
                                 <div class="row align-items-start h-75 ms-1 me-0" style="background-color:#3AAFA9">
                                     <h5 class="title">@item.Title</h5>
                                     <div class="tags">
-                                        <span class="tag"> Comments: @item.Comments.Count</span>
+                                        <span class="tag"> <span class="fw-bold">Details:</span> @(item.Content?.Length > 150 ? item.Content.Substring(0, 150) + "..." : item.Content) </span>
+                                    </div>
+                                    <div class="tags">
+                                        <span class="tag"><span class="fw-bold">Comments:</span> @item.Comments.Count</span>
                                     </div>
                                 </div>
                                 <div class="row date-style g-0 h-25 align-items-center pe-3" style="background-color:#3AAFA9">
                                     <span class="last-updated text-end">@item.CreateDate.ToString("MM/dd/yyyy - hh:mm tt")</span>
                                 </div>
                             </div>
-                        </div> </a>
+                        </div>
+                        </a>
+                    <div class="ms-4">Posted by: <a href="@Url.Action("Profile", "Home", new { id = item.ApplicationUserId })">@item.ApplicationUser?.Name</a>
+                        </div>
 
                 }
             </div>
@@ -53,15 +72,33 @@
                     </div>
                 </a>
                 <div class="row post m-3 ps-1 pt-1 pb-1 rounded g-0">
-            <h2>Popular</h2>
-            @{
-                var trending = Model.OrderByDescending(x => x.Comments.Count);
-            }
 
-            @foreach (var post in trending){
-                string imageTrending = $"/photos/{post.ImageFilename}";
-                <img src="@imageTrending" alt="@post.Title" class="img-thumbnail thumbnail mt-3" style="object-fit: cover; height: 200px;">
-            
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <h2>Your Posts</h2>
+                        @foreach (var post in userDiscussions)
+                        {
+                            string imageTrending = $"/photos/{post.ImageFilename}";
+                            <a href="@Url.Action("DiscussionDetails", "Home", new { id = post.DiscussionId })">
+                            <img src="@imageTrending" alt="@post.Title" class="img-thumbnail thumbnail mt-3" style="object-fit: cover; height: 200px;">
+                            <h5>@post.Title</h5>
+                            </a>
+                        }
+                    }
+                    else{
+                        var trending = Model.OrderByDescending(x => x.Comments.Count);
+                        <h2>Popular</h2>
+                        @foreach (var post in trending)
+                        {
+                            string imageTrending = $"/photos/{post.ImageFilename}";
+                            <a href="@Url.Action("DiscussionDetails", "Home", new { id = post.DiscussionId })">
+                            <img src="@imageTrending" alt="@post.Title" class="img-thumbnail thumbnail mt-3" style="object-fit: cover; height: 200px;">
+                            <h5>@post.Title</h5>
+                            </a>
+                        }
+                    }
+                    @{
+
             }
             </div>
         </div>

@@ -1,0 +1,101 @@
+﻿@model MovieForum.Data.ApplicationUser
+
+@{
+    var discussions = ViewBag.Discussions as List<MovieForum.Models.Discussion>;
+}
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<body class="DiscussionDetails">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-2 shadow p-3 m-1 bg-white rounded">
+
+                <img src="~/profile_img/@Model.ImageFilename" class="profile-thumb" />
+
+            </div>
+
+            <div class="col-md-8 shadow m-1 bg-white rounded">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Bio)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Bio)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Location)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Location)
+                    </dd>
+            </div>
+        </div>
+
+        <div class="row justify-content-center" style="margin-right: -18px; margin-left: -18px;">
+            <div class="col-md-10 shadow m-1 pt-3 pb-4 ps-4 pe-4 bg-white rounded">
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <p class="fs-1 fw-bold ms-3 m-0" style="color:#3AAFA9">Posts</p>
+                    </div>
+                    <div class="col-3 text-end">
+                        <a asp-action="Create" asp-controller="Discussions" class="btn btn-primary me-3">New Post</a>
+                    </div>
+                </div>
+                <div class="col newLink">
+
+                    @if (discussions != null && discussions.Any())
+                    {
+                        <ul class="ps-0">
+                            @foreach (var discussion in discussions)
+                            {
+                                string imageUrl = Url.Content($"/photos/{discussion?.ImageFilename}");
+                                <a href="@Url.Action("DiscussionDetails", "Home", new { id = discussion.DiscussionId })">
+                                    <div class="row post m-3 ps-1 pt-1 pb-1 rounded g-0 post-block">
+
+                                        <div class="col-md-4 pe-0" style="background-color:#3AAFA9">
+
+                                            <img src="@imageUrl" alt="@discussion.Title" class="img-thumbnail thumbnail" style="object-fit: cover; height: 200px;">
+
+                                        </div>
+
+                                        <div class="col-md-8 p-0" style="background-color:#3AAFA9">
+                                            <div class="row align-items-start h-75 ms-1 me-0" style="background-color:#3AAFA9">
+                                                <h5 class="title">@discussion.Title</h5>
+                                                <div class="tags">
+                                                    <span class="tag"> Comments: @discussion.Comments.Count</span>
+                                                </div>
+                                            </div>
+                                            <div class="row date-style g-0 h-25 align-items-center pe-3" style="background-color:#3AAFA9">
+                                                <span class="last-updated text-end">@discussion.CreateDate.ToString("MM/dd/yyyy - hh:mm tt")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No discussions found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

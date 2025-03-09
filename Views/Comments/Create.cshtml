@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Create";
 }
-<div class="row d-flex justify-content-center">
+<div class="row d-flex justify-content-center newLink">
     <div class="col-6">
         <h1>Create</h1>
         <h4>Comment</h4>
@@ -12,6 +12,7 @@
             <div class="col-12">
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="DiscussionId" />
                     <div class="form-group">
 
                         <textarea asp-for="Content" rows="4" class="form-control" placeholder="Enter your comment here"></textarea>
@@ -20,8 +21,7 @@
 
                     <div class="form-group mt-3 d-flex justify-content-between">
                         <input type="submit" value="Create" class="btn btn-primary" />
-                        @* This came from AI *@
-                        <a href="javascript:history.back()" class="btn btn-primary">Back to Post</a>
+                        <a asp-controller="Home" asp-action="DiscussionDetails" asp-route-id="@Model.DiscussionId">Back to Post</a>
                     </div>
                 </form>
             </div>

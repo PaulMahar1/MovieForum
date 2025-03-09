@@ -30,12 +30,14 @@
                             <i class="fa-solid fa-l fa-calendar-day" style="color: #3AAFA9;"></i> @Html.DisplayFor(model => model.CreateDate)
                         </td>
                 </tr>
-                @* <tr> *@
-                    @* <td> *@
-                        @* Username display *@
-                        @* <i class="fa-solid fa-l fa-location-dot" style="color: #B197FC;"></i> @Html.DisplayFor(model => model.Username) *@
-                    @* </td> *@
-                @* </tr> *@
+                <tr>
+                    <td>
+                            <a href="@Url.Action("Profile", "Home", new { id = Model.ApplicationUserId })">
+                                <img src="@Url.Content("~/profile_img/" + Model.ApplicationUser.ImageFilename)" class="post-thumb" /></a>
+                                Posted by: 
+                     <a href="@Url.Action("Profile", "Home", new { id = Model.ApplicationUserId })">@Html.DisplayFor(model => model.ApplicationUser.Name)</a>
+                    </td>
+                </tr>
                 <tr>
                         <td>
                             <i class="fa-solid fa-l fa-circle-info" style="color: #3AAFA9;"></i> @Html.DisplayFor(model => model.Content)
@@ -63,8 +65,13 @@
                                 <div class="col-9 ps-1">
                                     <span>@comment.Content</span>
                                 </div>
+
                                 <div class="col-3 pe-0 g-0 d-flex justify-content-end pe-1">
-                                    <span>@comment.CreateDate</span>
+                                    <span>
+                                        Comment by: <a href="@Url.Action("Profile", "Home", new { id = Model.ApplicationUserId })">@Html.DisplayFor(model => model.ApplicationUser.Name)</a>
+                                        <br/>
+                                        @comment.CreateDate
+                                        </span>
                                 </div>
                             </div>
                         }

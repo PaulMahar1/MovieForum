@@ -2,14 +2,22 @@
 
 @{
     ViewData["Title"] = "Details";
+    string imageUrl = $"/photos/{Model.ImageFilename}";
 }
-
-<h1>Details</h1>
+<div class="col-10 mx-auto newLink">
 
 <div>
-    <h4>Discussion</h4>
+    <h4>Discussion Details</h4>
     <hr />
     <dl class="row">
+            <div class="col-md-6">
+
+                <div class="col pe-0" style="background-color:#3AAFA9">
+                    <img src="@imageUrl" alt="@Model.Title" class="img-thumbnail thumbnail" style="object-fit: cover; height: 400px;">
+                </div>
+
+            </div>
+            <div class="col-md-5">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
@@ -34,9 +42,11 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CreateDate)
         </dd>
+        </div>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.DiscussionId">Edit</a> |
     <a asp-action="Index">Back to List</a>
+</div>
 </div>

@@ -3,17 +3,12 @@
 @{
     ViewData["Title"] = "Create";
 }
-<div class="row d-flex justify-content-center">
+<div class="row d-flex justify-content-center newLink">
     <div class="col-6">
-<h1>New Post</h1>
+        <h2>New Post</h2>
 
-<h4></h4>
-<hr />
-
-
-        
-        <form enctype="multipart/form-data" class="p-4" asp-action="Create" style="color:#FEFFFF;">
-            
+<hr />       
+        <form enctype="multipart/form-data" class="" asp-action="Create" style="color:#FEFFFF;">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -43,9 +38,9 @@
             </div>
         
             <div class="form-group mt-3">
-                <label asp-for="ImageFile" class="btn btn-primary">
-                <input asp-for="ImageFile" type="file" class="form-control-file" style="display:none;" />
-                <span id="image">Upload Image</span>
+                <label asp-for="ImageFile" class="">
+                <input asp-for="ImageFile" type="file" class="form-control-file"  />
+
                 </label>
 
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
@@ -56,10 +51,10 @@
             @*     <input asp-for="CreateDate" class="form-control" /> *@
             @*     <span asp-validation-for="CreateDate" class="text-danger"></span> *@
             @* </div> *@
-            
-            <div class="form-group mt-3 d-flex justify-content-between">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+
+            <div class="form-group mt-3 d-flex flex-column align-items-stretch">
+                <input type="submit" value="Create" class="w-100 btn btn-lg btn-primary" />
+                <a asp-action="Index" class="mt-2">Back to List</a>
             </div>
         
         </form>

@@ -11,7 +11,7 @@
 </head>
 <body style="background-color:#3AAFA9">
     <div style="width: 100%; height: 200px; overflow: hidden;">
-        <img src="/photos/banner.png" class="img-fluid" style="width: 100%; object-fit: cover;">
+        <img src="/images/banner.png" class="img-fluid" style="width: 100%; object-fit: cover;">
     </div>
 
     <header >
@@ -19,21 +19,26 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white box-shadow mb-3 pt-0 pb-0">
             <div class="container-fluid" style="background-color:#17252A">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-film fa-sm" style="color: #feffff;"></i> MovieForum</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <button class="navbar-toggler  m-2" type="button" style="background-color: #feffff; font-size:.70rem;" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon" style="color: #feffff;"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-house" style="color: #def2f1;"></i> Home  &nbsp</a>
-                        </li>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav flex">
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Discussions" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-message" style="color: #def2f1;"></i> Discussions</a>
-                        </li>
+                        @* <li class="nav-item"> *@
+                        @*     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-house" style="color: #def2f1;"></i> Home  &nbsp</a> *@
+                        @* </li> *@
+
+                        @* <li class="nav-item"> *@
+                        @*     <a class="nav-link" asp-area="" asp-controller="Discussions" asp-action="Index" style="color:#feffff"><i class="fa-solid fa-message" style="color: #def2f1;"></i> Discussions</a> *@
+                        @* </li> *@
+
+
+                         <partial name="_LoginPartial" />
+
                     </ul>
-                </div>
+                 </div>
             </div>
         </nav>
     </header>
@@ -71,6 +76,7 @@
 
                 <main role="main" class="col">
                     @RenderBody()
+                    <br/>
                 </main>
    
 

@@ -8,25 +8,37 @@ using Microsoft.EntityFrameworkCore;
 using MovieForum.Data;
 using MovieForum.Models;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace MovieForum.Controllers
 {
+    [Authorize]
     public class DiscussionsController : Controller
     {
         private readonly MovieForumContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DiscussionsController(MovieForumContext context)
+        public DiscussionsController(MovieForumContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Discussions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Discussion.ToListAsync());
+            string userId = _userManager.GetUserId(User);
+
+            var discussions = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId)
+                .Include("Comments")
+                .ToListAsync();
+
+            return View(discussions);
         }
 
-        // GET: Discussions/Details/5
+        //GET: Discussions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,7 +69,7 @@ namespace MovieForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,Username,Content,ImageFile,CreateDate")] Discussion discussion)
         {
-
+            discussion.ApplicationUserId = _userManager.GetUserId(User);
 
             // rename the uploaded file to a guid (unique filename). Set before photo saved in database.
             discussion.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(discussion.ImageFile?.FileName);
@@ -78,6 +90,7 @@ namespace MovieForum.Controllers
                     {
                         await discussion.ImageFile.CopyToAsync(fileStream);
                     }
+                    discussion.ApplicationUserId = _userManager.GetUserId(User);
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -94,7 +107,13 @@ namespace MovieForum.Controllers
                 return NotFound();
             }
 
-            var discussion = await _context.Discussion.FindAsync(id);
+            string userId = _userManager.GetUserId(User);
+
+            var discussion = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId) // filter by user id
+                .Include("Comments")                           // Include tags in the query
+                .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
             if (discussion == null)
             {
                 return NotFound();
@@ -107,7 +126,7 @@ namespace MovieForum.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Username,Content,ImageFilename,CreateDate")] Discussion discussion)
+        public async Task<IActionResult> Edit(int id, [Bind("DiscussionId,Title,Username,Content,ImageFilename,CreateDate,ApplicationuserId")] Discussion discussion)
         {
             if (id != discussion.DiscussionId)
             {
@@ -145,8 +164,13 @@ namespace MovieForum.Controllers
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
+
             var discussion = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId) // filter by user id
                 .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+
             if (discussion == null)
             {
                 return NotFound();
@@ -160,8 +184,17 @@ namespace MovieForum.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var discussion = await _context.Discussion.FindAsync(id);
-            if (discussion != null)
+            var userId = _userManager.GetUserId(User);
+
+            var discussion = await _context.Discussion
+                .Where(m => m.ApplicationUserId == userId) // filter by user id
+                .FirstOrDefaultAsync(m => m.DiscussionId == id);
+
+            if (discussion == null)
+            {
+                return NotFound();
+            }
+            else
             {
                 _context.Discussion.Remove(discussion);
             }
