@@ -42,7 +42,7 @@
                             </div>
 
                             <div class="col-md-8 p-0" style="background-color:#3AAFA9">
-                                <div class="row align-items-start h-75 ms-1 me-0" style="background-color:#3AAFA9">
+                                <div class="row align-items-start h-75 ms-1 me-0" style="background-color:#3AAFA9;">
                                     <h5 class="title">@item.Title</h5>
                                     <div class="tags">
                                         <span class="tag"> <span class="fw-bold">Details:</span> @(item.Content?.Length > 150 ? item.Content.Substring(0, 150) + "..." : item.Content) </span>
@@ -55,8 +55,7 @@
                                     <span class="last-updated text-end">@item.CreateDate.ToString("MM/dd/yyyy - hh:mm tt")</span>
                                 </div>
                             </div>
-                        </div>
-                        </a>
+                          </div>
                     <div class="ms-4">Posted by: <a href="@Url.Action("Profile", "Home", new { id = item.ApplicationUserId })">@item.ApplicationUser?.Name</a>
                         </div>
 

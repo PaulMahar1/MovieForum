@@ -66,8 +66,9 @@ namespace MovieForum.Controllers
             }
 
             var discussion = await _context.Discussion
-                                           .Include(m => m.Comments)
                                            .Include(m => m.ApplicationUser)
+                                           .Include(m => m.Comments)
+                                              .ThenInclude(c => c.ApplicationUser)
                                            .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (discussion == null)

@@ -54,7 +54,7 @@
                 </div>
                     <div class="col-3 text-end">
                         <a asp-controller="Comments" asp-action="Create" asp-route-id="@Model.DiscussionId" class="btn btn-primary">Add Comment</a>
-                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     @if (Model.Comments != null)
@@ -68,7 +68,7 @@
 
                                 <div class="col-3 pe-0 g-0 d-flex justify-content-end pe-1">
                                     <span>
-                                        Comment by: <a href="@Url.Action("Profile", "Home", new { id = Model.ApplicationUserId })">@Html.DisplayFor(model => model.ApplicationUser.Name)</a>
+                                        Comment by: <a href="@Url.Action("Profile", "Home", new { id = comment.ApplicationUserId })">@comment.ApplicationUser?.Name</a>
                                         <br/>
                                         @comment.CreateDate
                                         </span>

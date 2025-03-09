@@ -110,8 +110,8 @@ namespace MovieForum.Controllers
             string userId = _userManager.GetUserId(User);
 
             var discussion = await _context.Discussion
-                .Where(m => m.ApplicationUserId == userId) // filter by user id
-                .Include("Comments")                           // Include tags in the query
+                .Where(m => m.ApplicationUserId == userId)
+                .Include("Comments")      
                 .FirstOrDefaultAsync(m => m.DiscussionId == id);
 
             if (discussion == null)
