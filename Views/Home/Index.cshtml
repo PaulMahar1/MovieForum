@@ -56,6 +56,7 @@
                                 </div>
                             </div>
                           </div>
+                          </a>
                     <div class="ms-4">Posted by: <a href="@Url.Action("Profile", "Home", new { id = item.ApplicationUserId })">@item.ApplicationUser?.Name</a>
                         </div>
 
@@ -94,13 +95,13 @@
                             <img src="@imageTrending" alt="@post.Title" class="img-thumbnail thumbnail mt-3" style="object-fit: cover; height: 200px;">
                             <h5>@post.Title</h5>
                             </a>
+                        
                         }
                     }
-                    @{
 
-            }
             </div>
         </div>
         </div>
+
     </div>
 }
